@@ -29,7 +29,7 @@ class UserDaoTest {
     @DisplayName("Add와 findById 테스트")
     public void addAndFindById() {
         UserDao userDao = new UserDaoFactory().awsUserDao();
-        String id = "11";
+        String id = "12";
         userDao.add(new User(id, "Rara", "1123"));
         User user = userDao.findById(id);
         Assertions.assertEquals(user.getName(), "Rara");

@@ -9,9 +9,6 @@ public class UserDao {
 
         ConnectionMaker conn;
 
-    public UserDao() {
-        this.conn = new AwsConnectionMaker();
-    }
 
     public UserDao(ConnectionMaker conn) {
         this.conn = conn;
@@ -55,12 +52,5 @@ public class UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void main(String[] args) {
-        UserDao userDao = new UserDao();
-        User user = userDao.findById("1");
-        System.out.println(user.getName());
-
     }
 }
