@@ -21,7 +21,24 @@
 3. jdbcContextWithStatementStrategy로 분리
 4. deleteAllStrategy()
 5. AddStrategy
-   
-   
+
+## 4. getAllTest()
+1. deleteAll()에 익명 클래스 적용
+2. add()에 익명 클래스 적용
+3. JdbcContext로 분리
+4. .executeQuery()분리
+5. JdbcTemplate적용 deleteAll(), add()
+6. JdbcTemplate적용 getCount(), findById()
+7. getAll()추가
+8. getAllTest()추가
+
+
+
+
+
+
+
+
+
    
    
