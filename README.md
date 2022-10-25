@@ -14,3 +14,14 @@
 4. deleteAll(), GetCount() 테스트 추가
 5. Test Code @BeforeEach 적용
 6. add()에서 user==null인 경우 Exception처리
+
+## 3. AddStrategy
+1. try / catch / final 처리 - 213
+2. Statement Strategy 인터페이스 추가
+3. jdbcContextWithStatementStrategy로 분리
+4. deleteAllStrategy()
+5. AddStrategy
+   
+   
+   
+   
