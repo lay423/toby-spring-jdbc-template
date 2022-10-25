@@ -6,9 +6,7 @@ import java.sql.*;
 import java.util.Map;
 
 public class UserDao {
-
         ConnectionMaker conn;
-
 
     public UserDao(ConnectionMaker conn) {
         this.conn = conn;
@@ -52,5 +50,40 @@ public class UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void deleteAll() {
+        try{
+            Connection c = conn.makeConnection();
+
+            PreparedStatement pstmt = c.prepareStatement("DELETE FROM users");
+
+            pstmt.executeUpdate();
+
+            pstmt.close();
+            c.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getCount() {
+        String s;
+        try{
+            Connection c = conn.makeConnection();
+
+            PreparedStatement pstmt = c.prepareStatement("SELECT count(id) FROM users");
+
+            ResultSet rs = pstmt.executeQuery();
+            rs.next();
+            s = rs.getString("count(id)");
+
+            rs.close();
+            pstmt.close();
+            c.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return s;
     }
 }
