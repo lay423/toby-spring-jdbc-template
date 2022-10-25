@@ -12,6 +12,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
@@ -26,7 +28,7 @@ class UserDaoTest {
     User user3;
     User emptyUser;
     @BeforeEach
-    public void setUp(){
+    public void setUp() throws SQLException {
         userDao = context.getBean("awsUserDao", UserDao.class);
         userDao.deleteAll();
         user1 = new User("1", "Rara", "1123");
@@ -36,13 +38,13 @@ class UserDaoTest {
 
     @Test
     @DisplayName("Add와 findById 테스트")
-    public void addAndFindById() {
-
+    public void addAndFindById() throws SQLException {
+        userDao.deleteAll();
         assertEquals(userDao.getCount(), "0");
 
         userDao.add(user1);
-        assertThrows(NullPointerException.class, () ->{
-            userDao.add(emptyUser);
+        assertThrows(EmptyResultDataAccessException.class, () ->{
+            userDao.findById("0");
         });
 
         User user = userDao.findById("1");

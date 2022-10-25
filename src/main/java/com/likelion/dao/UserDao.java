@@ -1,15 +1,24 @@
 package com.likelion.dao;
 
 import com.likelion.domain.User;
+import com.mysql.cj.protocol.Resultset;
 
 import java.sql.*;
-import java.util.Map;
 
 public class UserDao {
         ConnectionMaker conn;
 
     public UserDao(ConnectionMaker conn) {
         this.conn = conn;
+    }
+
+    public void jdbcContextStatementStrategy(StatementStrategy stmt) throws SQLException {
+        Connection c = conn.makeConnection();
+        PreparedStatement pstmt = stmt.makeStrategy(c);
+        pstmt.executeUpdate();
+
+        pstmt.close();
+        c.close();
     }
 
     public void add(User user) {
@@ -52,35 +61,30 @@ public class UserDao {
         }
     }
 
-    public void deleteAll() {
-        try{
-            Connection c = conn.makeConnection();
+    public void deleteAll() throws SQLException {
 
-            PreparedStatement pstmt = c.prepareStatement("DELETE FROM users");
-
-            pstmt.executeUpdate();
-
-            pstmt.close();
-            c.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        StatementStrategy stmt = new StatementStrategy() {
+            @Override
+            public PreparedStatement makeStrategy(Connection connection) throws SQLException {
+                return connection.prepareStatement("delete from users");
+            }
+        };
+        jdbcContextStatementStrategy(stmt);
     }
 
-    public String getCount() {
-        String s;
-        try{
-            Connection c = conn.makeConnection();
-
-            PreparedStatement pstmt = c.prepareStatement("SELECT count(id) FROM users");
-
+    public String getCount() throws SQLException {
+        StatementStrategy stmt = (connection -> {
+            return connection.prepareStatement("select count(*) from users");
+        });
+        String s = null;
+        try {
+            PreparedStatement pstmt = stmt.makeStrategy(conn.makeConnection());
             ResultSet rs = pstmt.executeQuery();
             rs.next();
-            s = rs.getString("count(id)");
-
+            s = rs.getString(1);
             rs.close();
             pstmt.close();
-            c.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
